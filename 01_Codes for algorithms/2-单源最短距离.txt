@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <cstring>
+#include <limits.h>
+const int MAXN = 20;
+
+int nn, en;	
+int map[MAXN][MAXN], dis[MAXN];
+bool vis[MAXN];
+
+void dijkstra(int s) 
+{
+	int i,t,j,k;
+	for(i=1;i<=nn;i++)
+		vis[i]=0;
+	for (i = 1; i <= nn; i++)
+		dis[i] = map[s][i];
+	vis[s] = 1;
+	for (i = 1; i <= nn; i++) 
+	{
+		t = INT_MAX;
+		for (j = 1; j <= nn; j++)
+			if (vis[j]==0 && dis[j]<t)
+				t = dis[j], k = j;
+		if (t == INT_MAX) break;
+		vis[k] = 1;
+		for (j = 1; j <= nn; j++)
+			if (vis[j]==0 && map[k][j]<INT_MAX && dis[k]+map[k][j]<dis[j])
+				dis[j] = dis[k] + map[k][j];
+	}
+}
+
+int main() 
+{
+	int i,j,s, e, t;
+	while (scanf("%d%d", &nn, &en) && (nn || en)) 
+	{
+		for (i = 1; i <= nn; i++)
+                  for (j = 1; j <= nn; j++)
+			if(i!=j)
+				map[i][j] = INT_MAX;
+			else
+				map[i][j] =0;
+		for (i = 1; i <= en; i++) 
+		{
+			scanf("%d%d%d", &s, &e, &t);
+			map[s][e] = map[e][s] = t; //多重边如何处理？
+		}
+	scanf("%d", &i);
+	dijkstra(i);
+	for (i = 1; i <= nn; i++)
+		printf("%d ",dis[i]);
+	}
+	return 0;
+}
